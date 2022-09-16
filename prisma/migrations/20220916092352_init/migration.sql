@@ -1,0 +1,20 @@
+-- CreateTable
+CREATE TABLE "games" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "botChar" TEXT NOT NULL,
+    "finished" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "moves" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "index" INTEGER NOT NULL,
+    "byBot" BOOLEAN NOT NULL,
+    "character" TEXT NOT NULL,
+    "gameId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "moves_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "games" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

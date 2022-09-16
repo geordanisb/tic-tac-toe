@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Game {
+  id           String @id @default(cuid())
+  moves        Move[]        @relation("GameMove")
+  botChar      String 
+  finished     Boolean @default(false) 
+
+  createdAt     DateTime     @default(now()) 
+  updatedAt     DateTime     @updatedAt   
+  
+  @@map(name: "games")
+}
+
+model Move {
+  id        Int       @default(autoincrement()) @id
+  
+  index     Int 
+  byBot     Boolean  
+  character String  
+
+  gameId    String    
+  game      Game   @relation(name:"GameMove", fields: [gameId], references: [id])
+  
+  createdAt    DateTime  @default(now()) 
+  updatedAt    DateTime  @updatedAt
+
+  @@map(name: "moves")
+}

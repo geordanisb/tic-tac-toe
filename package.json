@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lt": "yarn lint && yarn tsc"
+    "lt": "yarn lint && yarn tsc",
+    "test":"yarn cypress open"
   },
   "dependencies": {
     "@prisma/client": "^3.15.2",
@@ -26,6 +27,7 @@
     "@types/node": "^18.0.0",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
+    "cypress": "^10.8.0",
     "eslint": "8.18.0",
     "eslint-config-next": "12.1.6",
     "typescript": "^4.7.4"

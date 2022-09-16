@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-The project was build with yarn, nextjs, reqct-query (for react cache), sqlite and prismajs as ORM.
+The project was build with yarn, typescript, nextjs, reqct-query (for react cache), sqlite, prismajs as ORM and cypress for e2e tests.
 
 The games info are stored in a sqlite file underfolder : /prisma/database.db
 
@@ -48,7 +48,13 @@ The games data stored could be review on: http://localhost:3000/api/tic-tac-toe/
 To clean the database run: yarn prisma migrate reset
 
 
+To run test (that will open cypress suit, the test implemented are e2e type):
 
+```bash
+yarn test
+# or
+npm run test
+```
 
 ## About Nextjs
 

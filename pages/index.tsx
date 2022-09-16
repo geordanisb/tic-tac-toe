@@ -57,7 +57,7 @@ export default function Home() {
     onMutate: (variables) => {
       //this a good place for optimistic ui as well
     },
-    onSettled: (data, error, variables, context) => {debugger;
+    onSettled: (data, error, variables, context) => {
       //refresh server side cache
       queryClient.invalidateQueries('GAMES');
       if(error){
@@ -179,7 +179,7 @@ export default function Home() {
             <Button onClick={(e)=>handlerHuCharSelection(e,'o')}>o</Button>
           </div>:''} */}
 
-              <table>
+              <table data-cy="board">
                 <tbody>
                   <tr>
                     <td>{renderButtonsMoveAction(0)}</td>
@@ -239,7 +239,6 @@ export default function Home() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient() 
-debugger;
   const origin = process.env.NEXT_PUBLIC_WEBAPP_URL
   let games = await getGames(origin);
   await queryClient.prefetchQuery('GAMES',()=>games)

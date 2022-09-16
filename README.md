@@ -51,6 +51,7 @@ To clean the database run: yarn prisma migrate reset
 To run test (that will open cypress suit, the test implemented are e2e type):
 
 ```bash
+yarn dev
 yarn test
 # or
 npm run test

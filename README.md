@@ -8,11 +8,10 @@ The games info are stored in a sqlite file underfolder : /prisma/database.db
 
 First create a `.env` file in the root folder, with a structure like:
 
-`
-DATABASE_URL="file:./database.db"
 
+DATABASE_URL="file:./database.db"
 NEXT_PUBLIC_WEBAPP_URL=http://localhost:3000
-`
+
 
 ```bash
 yarn install

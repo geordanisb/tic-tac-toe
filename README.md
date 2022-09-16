@@ -10,6 +10,7 @@ First create a `.env` file in the root folder, with a structure like:
 
 
 DATABASE_URL="file:./database.db"
+
 NEXT_PUBLIC_WEBAPP_URL=http://localhost:3000
 
 

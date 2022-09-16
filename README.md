@@ -52,6 +52,11 @@ To run test (that will open cypress suit, the test implemented are e2e type):
 
 ```bash
 yarn dev
+# or
+npm run dev
+```
+
+```bash
 yarn test
 # or
 npm run test

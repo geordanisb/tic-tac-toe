@@ -20,7 +20,7 @@ yarn install
 npm install
 ```
 
-To modify or debugge the code source, before generate prisma types for safe type checking -runing: 
+To modify or review the code source, before generate prisma types for safe type checking -running: 
 
 ```bash
 yarn prisma generate
@@ -38,6 +38,8 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start  new game with buttos in the right column under the game board.
+
+New games created by default are seleceted as the active one.
 
 Click on the grid cell to make a move.
 

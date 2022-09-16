@@ -135,19 +135,8 @@ export default async function handler(
             const moves = await prisma.move.findMany({where:{gameId:game.id}});
             const historial = moves.map((m)=>({ caracter:m.character,posicion:m.index }))
 
-            if(moves.length==9 || index==-1){
-              await prisma.game.update({where:{id:game.id},data:{finished:true}})
-              return res.status(201).json({ 
-                partidaId: partidaId,
-                estadoTablero,
-                siguienteMovimiento:null,
-                historial,
-                campoPersonalizado1:'Match end with draw!'
-              });
-            }
-
             let aiWin=''
-            if(winning(estadoTablero,game.botChar) || index==-1){
+            if(winning(estadoTablero,game.botChar)){
               await prisma.game.update({where:{id:game.id},data:{finished:true}})
               aiWin='AI has won the match!'
             }
@@ -158,7 +147,7 @@ export default async function handler(
               siguienteMovimiento:null,
               historial,
               campoPersonalizado1:aiWin
-            });
+          });
           }
           else return res.status(400).json({error:true,message:'_Not valid move_'})
         }
@@ -172,56 +161,12 @@ export default async function handler(
     }
   } 
 
-  if (req.method === 'PATCH') {debugger;
+  if (req.method === 'PATCH') {
     try {
-      const {partidaId} = req.body;
-      if(partidaId){
-         const game = await prisma.game.findFirst({where:{id:partidaId},include:{moves:true}})
-         if(game){
-          if(game.finished)
-            return res.status(400).json({error:true,message:'_Match has finished_'})
-
-          if(game.moves.length>=2){//at least one human move and the ai move
-            const lastMoves = game.moves.slice(-2);
-            const huLastMove = lastMoves[0]
-            const aiLastMove = lastMoves[1]
-            const gameUpdated = await prisma.game.update({
-              where:{id:partidaId},
-              data: {
-                moves: {
-                  delete: [{ id: huLastMove.id }, { id: aiLastMove.id }],
-                },
-              },
-              include:{moves:true}
-            })
-            if(gameUpdated){
-              let estadoTablero = ['-','-','-','-','-','-','-','-','-'];
-              let historial:{caracter:string;posicion:number}[]=[];
-
-              gameUpdated.moves.forEach((m)=>{
-                estadoTablero[m.index] = m.character;
-                historial.push({ caracter:m.character,posicion:m.index })
-              });
-
-              return  res.status(200).json({ 
-                partidaId: partidaId,
-                estadoTablero,
-                siguienteMovimiento:null,
-                historial,
-                campoPersonalizado1:'Last ai and your moves were removed!'
-              });
-            }
-          }
-          else return res.status(400).json({error:true,message:'_Not valid move_'})
-        }
-        else 
-          return res.status(400).json({error:true,message:'_Not valid matchId_'})
-      }
-      else
-        return res.status(400).json({error:true,message:'_Not valid matchId_'})
+           return res.status(200).json({ ok: true });
     }
     catch (error) {
-      return res.status(500).json({ ok: false, error:true,message: '_Not valid payload format_' });
+      return res.status(500).json({ error:true,message: 'Server Error' });
     }
   }
 

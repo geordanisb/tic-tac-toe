@@ -44,6 +44,28 @@ export default function Home() {
     },
   })
 
+  const editGameMutation = useMutation((payload:{partidaId:string})=>{
+    return fetch('/api/tic-tac-toe/play',{
+      method: "PATCH",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin"
+    }).then(r=>r.json())
+  },{
+    onMutate: (variables) => {
+      //this a good place for optimistic ui as well
+    },
+    onSettled: (data, error, variables, context) => {debugger;
+      //refresh server side cache
+      queryClient.invalidateQueries('GAMES');
+      if(error){
+          toast.error((error as MyError).message||'Server Error')
+      }
+    },
+  })
+
   useEffect(()=>{
     if(data && data.length){
       setGames(()=>data)
@@ -93,7 +115,7 @@ export default function Home() {
     if(!games)return <></>;
    return <ul>
                 {games.map(g=><li className="my-2" key={g.id}>
-                  <Button onClick={(e)=>handlerSelectGame(e,g.id)}>
+                  <Button  disabled={gameSelected && g.id==gameSelected.id} onClick={(e)=>handlerSelectGame(e,g.id)}>
                     Computer play as: {g.botChar} | Created on: {(new Date(g.createdAt).toLocaleString())}
                   </Button>
                   </li>)}
@@ -130,6 +152,14 @@ export default function Home() {
         posicion: -1
       }
     })
+  }
+
+  const handlerUndoLastMove = ()=>{
+    if(gameSelected){
+      editGameMutation.mutate({
+        partidaId:gameSelected.id
+      })
+    }
   }
 
   return (
@@ -173,7 +203,9 @@ export default function Home() {
                 </tbody>
                 
               </table>
-                <Button className="me-2 my-2" variant='warning' onClick={()=>handlerCreateGame()}>Create new game</Button><br/>
+                <Button className="me-2 my-2" variant='warning' onClick={()=>handlerCreateGame()}>Create new game</Button>
+                {gameSelected && (!gameSelected.finished && gameSelected.moves.length>=2) ? <><Button className="me-2 my-2" variant='danger' onClick={()=>handlerUndoLastMove()}>Undo last move</Button></>: <></>}
+                <br/>
             <Button className="me-2" onClick={()=>handlerCreateGame('x')}>Create new game with x</Button>
             <Button className="me-2" onClick={()=>handlerCreateGame('o')}>Create new game with o</Button>
             </Col>
